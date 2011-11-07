@@ -382,7 +382,8 @@ public class EditingPOIActivity implements DialogProvider {
 		}
 		// add amenities
 		if (OpenstreetmapUtil.Action.DELETE != action) {
-			List<Amenity> ams = Amenity.parseAmenities(n, new ArrayList<Amenity>());
+			MapRenderingTypes def = MapRenderingTypes.getDefault();
+			List<Amenity> ams = Amenity.parseAmenities(def, n, new ArrayList<Amenity>());
 			for (Amenity a : ams) {
 				repo.addAmenity(a);
 				repo.clearCache();
