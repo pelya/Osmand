@@ -584,7 +584,14 @@ void drawIconsOverCanvas(RenderingContext* rc, SkCanvas* canvas)
 				if (((ind >> b) & 1) == 0) {
 					alreadyDrawnIcons[i] = ind | (1 << b);
 					SkBitmap* ico = icon.bmp;
-					PROFILE_NATIVE_OPERATION(rc, canvas->drawBitmap(*ico, icon.x - ico->width() / 2, icon.y - ico->height() / 2, &p));
+					if(rc->highResMode) {
+						float left = icon.x - getDensityValue(rc, ico->width() / 2);
+						float top = icon.y - getDensityValue(rc, ico->height() / 2);
+						SkRect r = SkRect::MakeXYWH(left, top, getDensityValue(rc, ico->width()), getDensityValue(rc, ico->height()));
+						PROFILE_NATIVE_OPERATION(rc, canvas->drawBitmapRect(*ico, (SkIRect*) NULL, r, &p));
+					} else {
+						PROFILE_NATIVE_OPERATION(rc, canvas->drawBitmap(*ico, icon.x - ico->width() / 2, icon.y - ico->height() / 2, &p));
+					}
 				}
 		}
 		if(rc->interrupted()){
